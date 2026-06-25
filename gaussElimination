@@ -1,0 +1,35 @@
+import numpy as np
+
+np.set_printoptions(suppress=True,precision=4)
+
+n=int(input("Enter the no of variables:"))
+print("Enter the matrix row wise using space")
+A=[]
+for i in range(n):
+    row = list(map(float,input(f"Enter {i+1}th row:").split()))
+    A.append(row)
+
+A=np.array(A,dtype=float)
+print(f"Augmented matrix is:\n {A}")
+
+for i in range(n):
+    pivot_index = np.argmax(abs(A[i:n,i]))+i
+    if pivot_index!=i:
+        A[[pivot_index,i]]=A[[i,pivot_index]]
+    if A[i,i]==0:
+        print("System is incosistent")
+        exit(0)
+    for j in range(i+1,n):
+        A[j]=A[j]-(A[i]/A[i,i])*A[j,i]
+    
+print(f"Upper Triangular Matrix:\n {A}")
+
+x=  np.zeros(n)
+
+for i in range(n-1,-1,-1):
+    s = np.sum(A[i,i+1:n]*x[i+1:n])
+    x[i]=(A[i,n]-s)/A[i,i]
+
+print("Required Solution is:")
+for i in range(n):
+    print(f"x{i}={round(x[i],4)}")

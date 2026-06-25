@@ -1,0 +1,40 @@
+import pandas as pd
+def f(x):
+    return x*x -4*x-10
+
+a,b=-2,-1
+fa,fb = f(a),f(b)
+
+if(fa*fb>0):
+    print(f"No root lies between {a} and {b}")
+    exit(0)
+
+E=1e-20
+N=1000
+itr=1
+T=[]
+while(itr<=N):
+    c=(a+b)/2
+    fc = f(c)
+    T.append([itr,round(a,4),round(b,4),round(c,4),round(fa,4),round(fb,4),round(fc,4),abs(a-b)])
+    if(fc==0):
+        break
+    elif fa*fc>0:
+        a=c
+        fa=fc
+    else:
+        b=c
+        fb=fc
+    error = abs(a-b)
+    if error<E:
+        break
+
+    itr+=1
+
+if(itr>N):
+    print(f"Solution not achieved in {N} iterations")
+else:
+    print(f"Approx solution in {itr} iterations is {round(c,6)}")
+    table = pd.DataFrame(T,columns=["itr","a","b","c","fa","fb","fc","error"])
+
+    print(table.to_string(index=False,header=False))

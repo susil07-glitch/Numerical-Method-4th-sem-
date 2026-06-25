@@ -1,0 +1,36 @@
+import numpy as np
+
+np.set_printoptions(suppress=True,precision=4)
+
+n=int(input("Enter the no of variables:"))
+print("Enter the matrix row wise using space")
+A=[]
+for i in range(n):
+    row = list(map(float,input(f"Enter {i+1}th row:").split()))
+    A.append(row)
+
+A=np.array(A,dtype=float)
+print(f"Augmented matrix is:\n {A}")
+
+for i in range(n):
+    if A[i,i]==0:
+        for j in range(i+1,n):
+            if A[j,i]!=0:
+                A[[j,i]]=A[[i,j]]
+                break
+
+    if A[i,i]==0:
+        print("System is incosistent")
+        exit(0)
+    if A[i,i]!=0:
+        A[i]=A[i]/A[i,i]
+
+    for j in range(n):
+        if j!=i:
+            A[j]=A[j]-A[i]*A[j,i]
+        
+print(f"Normal Matrix:\n {A}")
+
+x = A[:,-1]
+print("Required Solution is:")
+print(x)

@@ -1,0 +1,72 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import math 
+
+eqn = input("Enter the function in x using numpy in python: ")
+def f(x):
+    try:
+        return eval(eqn)
+    except:
+        print("Invalid Syntax")
+        exit(0)
+
+a,b = map(float,input("Enter two initial guess using space: ").split())
+A=a
+B=b
+fa= f(a)
+fb = f(b)
+
+
+if(fa*fb>0 or np.isinf(fa) or np.isinf(fb) or np.isnan(fa) or np.isnan(fb)):
+    print("Value does not lie within this range")
+    exit(0)
+
+elif abs(f(a)-f(b))<1e-10:
+    print("Value tends to infinite! Change initial guess")
+
+E = float(input("Enter the max error:"))
+N = float(input("Enter the number of iterations:"))
+
+itr=1
+Table=[]
+mid_point=[]
+while(itr<=N):
+    c = (a*f(b)-b*f(a))/(f(b)-f(a))
+    err = abs(a-b)
+    if err<E:
+        break
+    elif f(a)*f(c)>0:
+        a=c
+    else:
+        b=c
+
+    if abs(f(a)-f(b))<1e-10:
+        print("Value tends to infinite! Change initial guess")
+        break
+
+    itr+=1
+    if(itr>N):#
+        print(f"Solution is not reached in {N} iterations")
+        break
+    else:
+        Table.append([itr,a,b,c,f(a),f(b),f(c),err])
+        print(f"Solution in {itr} iteration is {c}")
+        mid_point.append(c)
+
+
+Table= pd.DataFrame(Table,columns=["iter","a","b","c","fa","fb","fc","err"])
+print(Table.to_string(index=False))
+
+x=  np.linspace(A-5,B+5,1000)
+mid_point = np.array(mid_point)
+y = np.zeros_like(mid_point)
+plt.figure(figsize=(8,4))
+plt.plot(x,f(x),label=eqn , color="red")
+plt.scatter(mid_point,y,marker="X")
+plt.axhline(0)
+plt.axvline(0)
+plt.grid(True)
+plt.xlabel("x")
+plt.ylabel("y")
+plt.show()
