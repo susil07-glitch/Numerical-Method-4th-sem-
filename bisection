@@ -41,7 +41,7 @@ while(itr<=N):
         b=c
 
     itr+=1
-    if(itr>N):#
+    if(itr>N):
         print(f"Solution is not reached in {N} iterations")
         break
     else:
